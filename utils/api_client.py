@@ -14,3 +14,15 @@ def get_comments(post_id):
 #POST
 def create_post(data):
     return requests.post(f"{BASE_URL}/posts", json=data)
+
+# PUT
+def update_post(post_id, data):
+    return requests.put(f"{BASE_URL}/posts/{post_id}", json=data)
+
+# PATCH
+def patch_post(post_id, data):
+    return requests.patch(f"{BASE_URL}/posts/{post_id}", json=data)
+
+# DELETE
+def delete_post(post_id):
+    return requests.delete(f"{BASE_URL}/posts/{post_id}")
