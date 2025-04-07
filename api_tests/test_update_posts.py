@@ -76,3 +76,59 @@ def test_patch_post_empty_title():
     assert data["title"] == ""
     assert "body" in data
     assert "userId" in data
+
+# автотест с обновлением данных PUT
+def test_update_post_success():
+    updated_post = {
+        "title": "Измененный заголовок",
+        "body": "Изменено содержимое",
+        "userId": 1
+    }
+    response = update_post(1, updated_post)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1 #убемся, что обновили нужный пост
+    assert data["title"] == updated_post["title"]
+    assert data["body"] == updated_post["body"]
+    assert data["userId"]== updated_post["userId"]
+
+# автотест с частичным обновлением данных PATCH
+def test_patch_post_title():
+    new_title_patch = {"title": "Обновим только title"}
+    response = patch_post(1, new_title_patch)
+    assert response.status_code == 200
+    data=response.json()
+    assert data["id"] == 1
+    assert data["title"] == new_title_patch["title"]
+    assert "body" in data
+    assert "userId" in data
+
+# параметризация patch
+@pytest.mark.parametrize("post_id, patch_data", [
+    (1, {"title": "Обновлённый title поста 1"}),
+    (2, {"title": "Заголовок для поста 2"}),
+    (3, {"title": "Изменение только title (пост 3)"}),
+])
+def test_patch_title_posts(post_id, patch_data):
+    response = patch_post(post_id, patch_data)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["title"] == patch_data["title"]
+    assert data["id"] == post_id
+    assert "body" in data
+    assert "userId" in data
+
+# параметризация негативных тестов для patch
+@pytest.mark.parametrize("post_id, patch_data_invalid", [
+    (1, {"title": ""}), #пустой заголовк
+    (2, {"title": None}),#отсутствует значение
+    (3, {"title": 123})#неверный тип данных
+])
+def test_patch_post_invalid(post_id, patch_data_invalid):
+    response = patch_post(post_id, patch_data_invalid)
+    assert response.status_code != 500
+    data = response.json()
+    assert data["id"] == post_id
+    assert data["title"] == patch_data_invalid["title"]
+    assert "body" in data
+    assert "userId" in data

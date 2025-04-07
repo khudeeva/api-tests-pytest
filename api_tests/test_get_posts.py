@@ -95,4 +95,32 @@ def test_all_comments_have_valid_fields(post_id):
         assert "body" in comment
         assert "@" in comment["email"]
 
+# автотест на успешный запрос по ID
+def test_get_post_success():
+    response = get_post(1)
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, dict)
+    assert isinstance(data["userId"], int)
+    assert "userId" in data
+    assert "title" in data
+    assert "body" in data
+
+# автотест с параметризацией
+@pytest.mark.parametrize("post_id", [1, 10, 50, 100])
+def test_get_posts_parametrize_auto(post_id):
+    response = get_post(post_id)
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data["userId"], int)
+    assert "title" in data
+    assert "body" in data
+
+# автотест негативный запрос(несуществующий пост)
+def test_get_post_no_existing():
+    response  = get_post(1900)
+    assert response.status_code == 404
+
+
+
         
