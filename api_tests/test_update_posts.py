@@ -132,3 +132,29 @@ def test_patch_post_invalid(post_id, patch_data_invalid):
     assert data["title"] == patch_data_invalid["title"]
     assert "body" in data
     assert "userId" in data
+
+def test_update_post_api():
+   updated_post = {
+    "title": "Обновлённый заголовок",
+    "body": "Полное обновление поста",
+    "userId": 1
+    }
+   response = update_post(1,updated_post)
+   assert response.status_code == 200
+   data=response.json()
+   assert data["id"] == 1
+   assert data["title"] == updated_post["title"]
+   assert data["body"] == updated_post["body"]
+   assert data["userId"] == updated_post["userId"]
+
+def test_patch_post_api():
+    partial_data = {
+        "title": "Частичное обновление заголовка"   
+        }
+    response = patch_post(1,partial_data)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1
+    assert data["title"] == partial_data["title"]
+    assert "body" in data
+    assert "userId" in data

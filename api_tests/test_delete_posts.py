@@ -18,3 +18,7 @@ def test_delete_post_non_exisiting_post():
     assert response.status_code !=500
     assert response.text == "{}"
 
+def test_delete_post_api():
+    response = delete_post(1)
+    assert response.status_code == 200
+    assert response.text == "{}"

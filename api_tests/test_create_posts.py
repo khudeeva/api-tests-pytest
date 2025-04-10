@@ -137,3 +137,27 @@ def test_create_post_invalid_data_parametrized(invalid_post):
     assert data.get("title") == invalid_post.get("title")
     assert data.get("body") == invalid_post.get("body")
     assert data.get("userId") == invalid_post.get("userId")
+
+def test_create_post_api():
+    new_post = {
+        "title": "Автотест",
+    "body": "Создано в рамках практики",
+    "userId": 101
+    }
+    response = create_post(new_post)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == new_post["title"]
+    assert data["body"] == new_post["body"]
+    assert data["userId"] == new_post["userId"]
+
+def test_create_post_invalid_data():
+    invalid_post = {}
+    response = create_post(invalid_post)
+    assert response.status_code != 500
+    data = response.json()
+    assert "id" in data
+    assert "title" not in data
+    assert "body" not in data
+    assert "userId" not in data  

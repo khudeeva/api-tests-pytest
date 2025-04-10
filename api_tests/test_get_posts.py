@@ -121,6 +121,26 @@ def test_get_post_no_existing():
     response  = get_post(1900)
     assert response.status_code == 404
 
+def test_get_post_7():
+    response = get_post(7)
+    assert response.status_code == 200
+    data=response.json()
+    assert data["id"] == 7
+    assert data["userId"] == 1
+    assert "body" in data
+    assert "title" in data
 
+def test_get_nonexistent_post():
+    response = get_post(9999)
+    assert response.status_code == 404
+    assert response.json() == {} # тело пустое
 
-        
+@pytest.mark.parametrize("post_id", [3, 7, 9])
+def test_get_post_by_id(post_id):
+    response= get_post(post_id)
+    assert response.status_code == 200
+    data = response.json()
+    assert "id" in data
+    assert "title" in data
+    assert data["title"].strip() !=""
+    
