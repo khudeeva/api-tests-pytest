@@ -161,3 +161,30 @@ def test_create_post_invalid_data():
     assert "title" not in data
     assert "body" not in data
     assert "userId" not in data  
+
+@pytest.mark.parametrize("new_data_api",[
+    {"title": "Пост 1", "body": "Описание 1", "userId": 10},
+    {"title": "Пост 1", "body": "Описание 1", "userId": 20},
+    {"title": "Пост 1", "body": "Описание 1", "userId": 30}
+])
+def test_create_post_parametrize_api(new_data_api):
+    response = create_post(new_data_api)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == new_data_api["title"]
+    assert data["body"] == new_data_api["body"]
+    assert data["userId"] == new_data_api["userId"]
+@pytest.mark.parametrize("invalid_all_data", [
+    {"title": "", "body": "Нет title", "userId": 10},
+    {"title": "Title есть", "body": "Нет userId", "userId": None},
+    {"title": "Title есть", "body": "", "userId": 30}
+])
+def test_invalid_parametrize(invalid_all_data):
+    response = create_post(invalid_all_data)
+    assert response.status_code !=500
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == invalid_all_data["title"]
+    assert data["body"] == invalid_all_data["body"]
+    assert data["userId"] == invalid_all_data["userId"]
