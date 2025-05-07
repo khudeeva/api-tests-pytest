@@ -188,3 +188,55 @@ def test_invalid_parametrize(invalid_all_data):
     assert data["title"] == invalid_all_data["title"]
     assert data["body"] == invalid_all_data["body"]
     assert data["userId"] == invalid_all_data["userId"]
+
+def test_create_post_practice():
+    new_data_practice = {
+    "title": "My post",
+    "body": "Some text here",
+    "userId": 1
+}
+    response=create_post(new_data_practice)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == new_data_practice["title"]
+    assert data["body"] == new_data_practice["body"]
+    assert data["userId"] == new_data_practice["userId"]
+
+def test_create_post_practice2():
+    new_data_practice2 = {
+        "title": "Some title here",
+        "body": "Some text here",
+        "userId":1
+    }
+    response = create_post(new_data_practice2)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == new_data_practice2["title"]
+    assert data["body"] == new_data_practice2["body"]
+    assert data["userId"] == new_data_practice2["userId"]
+
+@pytest.mark.parametrize("new_data_posts", [
+    {"title": "My test 1", "body": "My text for test1", "userId": 1},
+    {"title": "My test 2", "body": "My text for test2", "userId": 2},
+    {"title": "My test 3", "body": "My text for test3", "userId": 3}
+])
+def test_create_post_parametrize_practice(new_data_posts):
+    response = create_post(new_data_posts)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == new_data_posts["title"]
+    assert data["body"] == new_data_posts["body"]
+    assert data["userId"] == new_data_posts["userId"]
+
+def test_create_post_missing_fields():
+    data_missing = {
+        "title": "This title for test"
+    }
+    response = create_post(data_missing)
+    assert response.status_code != 500
+    data = response.json()
+    assert data["title"] == data_missing["title"]
+    

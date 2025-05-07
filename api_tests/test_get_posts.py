@@ -144,3 +144,11 @@ def test_get_post_by_id(post_id):
     assert "title" in data
     assert data["title"].strip() !=""
     
+def test_get_post_practice():
+    response = get_post(1)
+    assert response.status_code == 200
+    data = response.json()
+    assert "id" in data
+    assert "title" in data
+    assert "body" in data
+    assert "userId" in data

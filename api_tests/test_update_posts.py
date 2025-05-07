@@ -158,3 +158,28 @@ def test_patch_post_api():
     assert data["title"] == partial_data["title"]
     assert "body" in data
     assert "userId" in data
+
+def test_put_post_practice():
+        new_data_practice = {
+            "title": "My new title here",
+            "body": "This text here",
+            "userId": 1
+        }
+        response = update_post(1, new_data_practice)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == 1
+        assert data["title"] == new_data_practice["title"]
+        assert data["body"] == new_data_practice["body"]
+        assert data["userId"] == new_data_practice["userId"]
+def test_patch_post_practice():
+    new_title_practice = {
+        "title": "My only title here"
+    }
+    response = patch_post(1, new_title_practice)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1 
+    assert data["title"] == new_title_practice["title"]
+    assert "body" in data
+    assert "userId" in data
