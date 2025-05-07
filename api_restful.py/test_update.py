@@ -1,2 +1,2 @@
-from utils.api_restful import create_post
+from utils.api_restful import update_post, patch_post
 import pytest
