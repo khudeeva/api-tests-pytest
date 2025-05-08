@@ -239,4 +239,31 @@ def test_create_post_missing_fields():
     assert response.status_code != 500
     data = response.json()
     assert data["title"] == data_missing["title"]
+
+@pytest.mark.parametrize("create_posts_data", [
+{"title": "Title1", "body": "This text for title1", "userId": 1},
+{"title": "Title2", "body": "This text for title2", "userId": 2},
+{"title": "Title3", "body": "This text for title3", "userId": 3}
+])
     
+def test_create_posts_practice(create_posts_data):
+    response = create_post(create_posts_data)
+    assert response.status_code in [200, 201]
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == create_posts_data["title"]
+    assert data["body"] == create_posts_data["body"]
+    assert data["userId"] == create_posts_data["userId"]
+
+@pytest.mark.parametrize("invalid_posts_data", [
+{"title": "Title1", "body": "", "userId": 1},
+{"title": "", "body": "This text for title2", "userId": 2},
+{"title": "", "body": "", "userId": 3}
+])
+def test_negative_parametrize_posts(invalid_posts_data):
+    response = create_post(invalid_posts_data)
+    assert response.status_code !=500
+    data = response.json()
+    assert "title" not in data or data["title"] == invalid_posts_data["title"]
+    assert "body" not in data or data["body"] == invalid_posts_data["body"]
+
