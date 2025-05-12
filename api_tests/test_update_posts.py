@@ -183,3 +183,15 @@ def test_patch_post_practice():
     assert data["title"] == new_title_practice["title"]
     assert "body" in data
     assert "userId" in data
+
+def test_patch_post_title_exam():
+    new_title_exam = {
+        "title": "My new title in test exam"
+    }
+    response = patch_post(1, new_title_exam)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1
+    assert data["title"] == new_title_exam["title"]
+    assert "body" in data
+    assert "userId" in data
