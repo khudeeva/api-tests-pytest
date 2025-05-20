@@ -15,3 +15,15 @@ def test_create_post():
     assert data["title"] == new_data["title"]
     assert data["body"] == new_data["body"]
     assert data["userId"] == new_data["userId"]
+
+def test_create_posts():
+    new_info = {
+        "name": "Ksenia QA",
+        "username": "ksenia_test",
+        "email": "ksenia@example.com"  
+      } 
+    response = requests.post("https://jsonplaceholder.typicode.com/users", json = new_info)
+    assert response.status_code in [200, 201]
+    data = response.json()
+    assert "id" in data 
+    assert data["name"] == "Ksenia QA"
