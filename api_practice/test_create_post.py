@@ -27,3 +27,19 @@ def test_create_posts():
     data = response.json()
     assert "id" in data 
     assert data["name"] == "Ksenia QA"
+
+def test_practice_create():
+    update_info = {
+        "title": "QA rocks",
+        "body": "Автотест для создания поста",
+        "userId": 99
+        }
+
+    
+    response = requests.post("https://jsonplaceholder.typicode.com/posts", json = update_info)
+    assert response.status_code in [200, 201]
+    data = response.json()
+    assert "id" in data
+    assert data["title"] == update_info["title"]
+    assert data["userId"] == update_info["userId"]
+    assert data["body"] == update_info["body"]
